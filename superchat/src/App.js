@@ -1,6 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import './App.css';
-import firebase from 'firebase/app';
+import firebase from 'firebase/compat/app';
+import 'firebase/compat/auth';
+import 'firebase/compat/firestore';
 import 'firebase/firestore';
 import 'firebase/auth';
 
@@ -57,14 +59,14 @@ function ChatRoom(){
   const [messages ] = useCollectionData(query, {idField: 'id'});
   const [formValue, setFormValue] = useState('');
 
-  const sendMessage =async(e) => {
+  const sendMessage = async(e) => {
     e.preventDefault();
 
     const {uid, photoURL} = auth.currentUser;
 
     await messageRef.add({
       text:formValue,
-      createdAt: firebase.firestore.FieldValue.serverTimeStamp(),
+      createdAt: firebase.firestore.FieldValue.serverTimestamp(),
       uid,
       photoURL
     })
@@ -74,13 +76,17 @@ function ChatRoom(){
   return(
     <>
     <main>
-      {messages && messages.map(msg => <ChatMessage key ={msg.id} message={msg}/>)}
+      {messages && messages.map((msg) => <ChatMessage key ={msg.id} message={msg}/>)}
       <span ref={dummy}> </span>
     </main>
-    <form>
-      <input value={formValue} onChange={(e) => setFormValue(e.target.value)} placeholder="say something nice" />
+    <form onSubmit={sendMessage}> {/* Add onSubmit event handler */}
+      <input 
+      value={formValue} 
+      onChange={(e) => setFormValue(e.target.value)} placeholder="say something nice" />
 
-      <button type= "submit" disabled ={!formValue}>🕊️</button>
+      <button type= "submit" disabled ={!formValue}>
+        🕊️
+        </button>
 
     </form>
     </>)
@@ -91,8 +97,8 @@ function ChatMessage(props) {
 
   const messageClass =uid === auth.currentUser.uid ? 'sent' : 'received';
   return(<>
-  <div className={'message ${messageClass}'}>
-    <img src={photoURL || "https://api.adorable.io/avatars/23/abott@adorable.png"}/>
+  <div className={`message ${messageClass}`}>
+    <img src={photoURL || "https://api.adorable.io/avatars/23/abott@adorable.png"} alt=""/>
     <p>{text}</p>
 
   </div>
