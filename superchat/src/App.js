@@ -5,12 +5,10 @@ import 'firebase/compat/auth';
 import 'firebase/compat/firestore';
 import 'firebase/firestore';
 import 'firebase/auth';
-import { useAuthState, useCollectionData } from 'react-firebase-hooks/firestore';
+import {  useCollectionData } from 'react-firebase-hooks/firestore';
+import { useAuthState } from 'react-firebase-hooks/auth';
 
 
-
-import {useAuthState } from 'react-firebase-hooks/auth';
-import {useCollectionData} from 'react-firebase-hooks/firestore';
 
 firebase.initializeApp({
   apiKey: "AIzaSyBAKk2jNqqqL378K9UkcR77iEYugPrvbmY",
@@ -26,6 +24,9 @@ const firestore= firebase.firestore();
 
 function App() {
   const [user] =useAuthState(auth);
+  const signOut = () => {
+    auth.signOut();
+  };
   return (
     <div className="App">
       <header>
