@@ -5,6 +5,9 @@ import 'firebase/compat/auth';
 import 'firebase/compat/firestore';
 import 'firebase/firestore';
 import 'firebase/auth';
+import { useAuthState, useCollectionData } from 'react-firebase-hooks/firestore';
+
+
 
 import {useAuthState } from 'react-firebase-hooks/auth';
 import {useCollectionData} from 'react-firebase-hooks/firestore';
@@ -27,7 +30,7 @@ function App() {
     <div className="App">
       <header>
         <h1>ChatApp⚛️🔥💬 </h1>
-        <signOut/>
+        {user && <button onClick={signOut}>Sign Out</button>}
        
       </header>
       <section>
